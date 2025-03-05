@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Event Lookup</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 100vh;
+      margin: 0;
+      background: url('Lasya.jpg') no-repeat center center fixed;
+      background-size: 100% 100%;
+      color: #fff;
+      overflow-y: auto;
+      padding: 20px;
+    }
+
+    .container {
+      background: rgba(0, 0, 0, 0.75);
+      padding: 30px;
+      border-radius: 12px;
+      max-width: 550px;
+      width: 90%;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      width: calc(100% - 20px);
+      padding: 12px;
+      font-size: 1rem;
+      border: 2px solid #ffffff;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      outline: none;
+    }
+
+    input[type="text"]::placeholder {
+      color: #ddd;
+    }
+
+    button {
+      padding: 12px 20px;
+      font-size: 1rem;
+      background: #0ea5e9;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      background: #007bb5;
+    }
+
+    #result {
+      margin-top: 25px;
+      text-align: left;
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+
+    .result-item {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+      color: #000;
+    }
+
+    .result-item p {
+      margin: 5px 0;
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    .result-item strong {
+      font-size: 1.2rem;
+      color: #1e293b;
+    }
+
+    #result p.no-results {
+      font-size: 1rem;
+      text-align: center;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Event Participant Lookup</h1>
+    <input type="text" id="search" placeholder="Enter Name...">
+    <button onclick="searchUser()">Search</button>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    let rawData = [];
+
+    fetch('sanitized_events.json')
+      .then(response => response.json())
+      .then(data => {
+        let mergedData = {};
+
+        data.forEach(entry => {
+          let name = entry.NAME.toLowerCase().trim();
+          if (!mergedData[name]) {
+            mergedData[name] = {
+              ...entry,
+              NAME: name,
+              PARTICIPATING_ITEMS: new Set(entry.PARTICIPATING_ITEMS.split(', '))
+            };
+          } else {
+            entry.PARTICIPATING_ITEMS.split(', ').forEach(item => mergedData[name].PARTICIPATING_ITEMS.add(item));
+          }
+        });
+
+        rawData = Object.values(mergedData).map(entry => ({
+          ...entry,
+          PARTICIPATING_ITEMS: [...entry.PARTICIPATING_ITEMS].join(', ')
+        }));
+        console.log("Loaded Data:", rawData);
+      })
+      .catch(error => console.error("Error loading JSON:", error));
+
+    function isValidQuery(query) {
+      // Allow only alphabetic characters and periods (.), disallow numbers and spaces
+      return /^[a-zA-Z.]+$/.test(query);
+    }
+
+    function searchUser() {
+      let query = document.getElementById('search').value.toLowerCase().trim();
+      let resultDiv = document.getElementById('result');
+      resultDiv.innerHTML = '';
+
+      // Validate the input to prevent empty queries, numbers, and special characters (except .)
+      if (!query || !isValidQuery(query)) {
+        resultDiv.innerHTML = '<p class="no-results">Please enter a valid name.</p>';
+        return;
+      }
+
+      console.log("Searching for:", query);
+      let matches = rawData.filter(entry => entry.NAME.includes(query));
+
+      if (matches.length > 0) {
+        matches.forEach(entry => {
+          let info = `<div class='result-item'>
+                            <p><strong>${entry.NAME.toUpperCase()}</strong></p>
+                            <p>KTU No: ${entry.KTU_REGISTER_NO}</p>
+                            <p>Department: ${entry.DEPARTMENT}</p>
+                            <p>Year: ${entry.YEAR_OF_STUDY}</p>
+                            <p>Events: ${entry.PARTICIPATING_ITEMS}</p>
+                        </div>`;
+          resultDiv.innerHTML += info;
+        });
+      } else {
+        resultDiv.innerHTML = '<p class="no-results">No matching records found.</p>';
+      }
+    }
+
+  </script>
+</body>
+
+</html>
