@@ -1,226 +1,253 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Event Lookup</title>
-    <style>
-      @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
 
-      body {
-        font-family: "Poppins", sans-serif;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-        height: 100vh;
-        margin: 0;
-        background: url("Lasya.jpg") no-repeat center center fixed; 
-        background-size: 100% 100%; /* Ensures image covers the entire screen */
-        color: #fff;
-        overflow: hidden;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Event Lookup</title>
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap");
 
-      .container {
-        background: rgba(0, 0, 0, 0.4); /* More transparent black */
-        padding: 20px; /* Reduced padding */
-        border-radius: 12px;
-        max-width: 90%; /* Ensures content scales down */
-        width: 500px;
-        box-shadow: 0 0 10px rgba(255, 0, 0, 0.8); /* Red shadow */
-        overflow-y: auto; 
-        backdrop-filter: blur(2px); /* Reduced blur */
-      }
+    body {
+      font-family: "Poppins", sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      height: 100vh;
+      margin: 0;
+      background: url("Lasya.jpg") no-repeat center center fixed;
+      background-size: 100% 100%;
+      /* Ensures image covers the entire screen */
+      color: #fff;
+      overflow: hidden;
+    }
 
-      h1 {
-        font-size: 1.8rem; /* Slightly smaller */
-        margin-bottom: 15px;
-        text-shadow: 0 2px 3px rgba(255, 0, 0, 0.8); /* Red shadow */
-        color: #fff;
-      }
+    .container {
+      background: rgba(0, 0, 0, 0.4);
+      /* More transparent black */
+      padding: 20px;
+      /* Reduced padding */
+      border-radius: 12px;
+      max-width: 90%;
+      /* Ensures content scales down */
+      width: 500px;
+      box-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+      /* Red shadow */
+      overflow-y: auto;
+      backdrop-filter: blur(2px);
+      /* Reduced blur */
+    }
 
-      input[type="text"] {
-        width: calc(100% - 20px);
-        padding: 10px; /* Reduced padding */
-        font-size: 0.9rem; /* Slightly smaller */
-        border: 2px solid #ffffff;
-        border-radius: 8px;
-        background: rgba(255, 255, 255, 0.1); 
-        color: #ffffff;
-        outline: none;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
-        transition: box-shadow 0.3s ease;
-      }
+    h1 {
+      font-size: 1.8rem;
+      /* Slightly smaller */
+      margin-bottom: 15px;
+      text-shadow: 0 2px 3px rgba(255, 0, 0, 0.8);
+      /* Red shadow */
+      color: #fff;
+    }
 
-      input[type="text"]::placeholder {
-        color: #ddd;
-      }
-      input[type="text"]:focus {
-        box-shadow: 0 3px 6px rgba(255, 0, 0, 0.8); /* Red shadow */
-        border-color: #ff0000; /* Red border */
-      }
+    input[type="text"] {
+      width: calc(100% - 20px);
+      padding: 10px;
+      /* Reduced padding */
+      font-size: 0.9rem;
+      /* Slightly smaller */
+      border: 2px solid #ffffff;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      outline: none;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      transition: box-shadow 0.3s ease;
+    }
 
-      button {
-        padding: 10px 18px; /* Reduced padding */
-        font-size: 0.9rem; /* Slightly smaller */
-        background: linear-gradient(to right, #ff0000, #800000); /* Red gradient */
-        color: white;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        margin-top: 8px;
-        box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3); 
-        transition: background 0.3s ease, transform 0.2s ease;
-      }
+    input[type="text"]::placeholder {
+      color: #ddd;
+    }
 
-      button:hover {
-        background: linear-gradient(to right, #800000, #ff0000); /* Reversed gradient */
-        transform: translateY(-2px); 
-      }
+    input[type="text"]:focus {
+      box-shadow: 0 3px 6px rgba(255, 0, 0, 0.8);
+      /* Red shadow */
+      border-color: #ff0000;
+      /* Red border */
+    }
 
-      #result {
-        margin-top: 20px;
-        text-align: left;
-        max-height: 60vh; 
-        overflow-y: auto;
-      }
+    button {
+      padding: 10px 18px;
+      /* Reduced padding */
+      font-size: 0.9rem;
+      /* Slightly smaller */
+      background: linear-gradient(to right, #ff0000, #800000);
+      /* Red gradient */
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 8px;
+      box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
 
-      .result-item {
-        background: rgba(255, 255, 255, 0.8); 
-        padding: 15px;
-        border-radius: 8px;
-        margin: 10px 0;
-        color: #000;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
-        transition: transform 0.2s ease, box-shadow 0.2s ease; 
-      }
+    button:hover {
+      background: linear-gradient(to right, #800000, #ff0000);
+      /* Reversed gradient */
+      transform: translateY(-2px);
+    }
 
-      .result-item:hover {
-        transform: translateY(-3px); 
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
-      }
+    #result {
+      margin-top: 20px;
+      text-align: left;
+      max-height: 60vh;
+      overflow-y: auto;
+      margin-bottom: 20px;
+    }
 
-      .result-item p {
-        margin: 6px 0; 
-        font-size: 0.9rem; /* Slightly smaller */
-        line-height: 1.5;
-      }
+    .result-item {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 15px;
+      border-radius: 8px;
+      margin: 10px 0;
+      color: #000;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
 
-      .result-item strong {
-        font-size: 1.1rem; /* Slightly smaller */
-        color: #333; 
-      }
+    .result-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
 
-      #result p.no-results {
-        font-size: 0.9rem; /* Slightly smaller */
-        text-align: center;
-      }
+    .result-item p {
+      margin: 6px 0;
+      font-size: 0.9rem;
+      /* Slightly smaller */
+      line-height: 1.5;
+    }
 
-      .logo-container {
-        width: 80px; /* Smaller logo */
-        height: 80px; 
-        background-color: rgba(255, 255, 255, 0.1); /* Translucent white */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 50%;
-        margin: 0 auto 15px; 
-        box-shadow: 0 0 8px rgba(255, 0, 0, 0.8); /* Red shadow */
-      }
+    .result-item strong {
+      font-size: 1.1rem;
+      /* Slightly smaller */
+      color: #333;
+    }
 
-      .logo-container img {
-        max-width: 80%;
-        max-height: 80%;
-        filter: brightness(1.3); 
-      }
-    </style>
-  </head>
+    #result p.no-results {
+      font-size: 0.9rem;
+      /* Slightly smaller */
+      text-align: center;
+    }
 
-  <body>
-    <div class="container">
-      <div class="logo">
-        <div class="logo-container">
-          <img src="Union_Icon.png" alt="Union Logo" />
-        </div>
+    .logo-container {
+      width: 80px;
+      /* Smaller logo */
+      height: 80px;
+      background-color: rgba(255, 255, 255, 0.1);
+      /* Translucent white */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      margin: 0 auto 15px;
+      box-shadow: 0 0 8px rgba(255, 0, 0, 0.8);
+      /* Red shadow */
+    }
+
+    .logo-container img {
+      max-width: 80%;
+      max-height: 80%;
+      filter: brightness(1.3);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="logo">
+      <div class="logo-container">
+        <img src="Union_Icon.png" alt="Union Logo" />
       </div>
-      <h1>Event Participant Lookup</h1>
-      <input type="text" id="search" placeholder="Enter Name..." />
-      <button onclick="searchUser()">Search</button>
-      <div id="result"></div>
     </div>
+    <h1>Event Participant Lookup</h1>
+    <input type="text" id="search" placeholder="Enter Name..." />
+    <button onclick="searchUser()">Search</button>
+    <div id="result"></div>
+  </div>
 
-    <script>
-      let rawData = [];
+  <script>
+    let rawData = [];
 
-      fetch("sanitized_events.json")
-        .then((response) => response.json())
-        .then((data) => {
-          let mergedData = {};
+    fetch("sanitized_events.json")
+      .then((response) => response.json())
+      .then((data) => {
+        let mergedData = {};
 
-          data.forEach((entry) => {
-            let name = entry.NAME.toLowerCase().trim();
-            if (!mergedData[name]) {
-              mergedData[name] = {
-                ...entry,
-                NAME: name,
-                PARTICIPATING_ITEMS: new Set(
-                  entry.PARTICIPATING_ITEMS.split(", ")
-                ),
-              };
-            } else {
-              entry.PARTICIPATING_ITEMS.split(", ").forEach((item) =>
-                mergedData[name].PARTICIPATING_ITEMS.add(item)
-              );
-            }
-          });
+        data.forEach((entry) => {
+          let name = entry.NAME.toLowerCase().trim();
+          if (!mergedData[name]) {
+            mergedData[name] = {
+              ...entry,
+              NAME: name,
+              PARTICIPATING_ITEMS: new Set(
+                entry.PARTICIPATING_ITEMS.split(", ")
+              ),
+            };
+          } else {
+            entry.PARTICIPATING_ITEMS.split(", ").forEach((item) =>
+              mergedData[name].PARTICIPATING_ITEMS.add(item)
+            );
+          }
+        });
 
-          rawData = Object.values(mergedData).map((entry) => ({
-            ...entry,
-            PARTICIPATING_ITEMS: [...entry.PARTICIPATING_ITEMS].join(", "),
-          }));
-          console.log("Loaded Data:", rawData);
-        })
-        .catch((error) => console.error("Error loading JSON:", error));
+        rawData = Object.values(mergedData).map((entry) => ({
+          ...entry,
+          PARTICIPATING_ITEMS: [...entry.PARTICIPATING_ITEMS].join(", "),
+        }));
+        console.log("Loaded Data:", rawData);
+      })
+      .catch((error) => console.error("Error loading JSON:", error));
 
-      function isValidQuery(query) {
-        // Allow only alphabetic characters and periods (.), disallow numbers and spaces
-        return /^[a-zA-Z.]+$/.test(query);
+    function isValidQuery(query) {
+      // Allow alphabetic characters, periods (.), and spaces, disallow numbers and special characters
+      return /^[a-zA-Z.\s]+$/.test(query);
+    }
+
+    function searchUser() {
+      let query = document
+        .getElementById("search")
+        .value.toLowerCase()
+        .trim();
+      let resultDiv = document.getElementById("result");
+      resultDiv.innerHTML = "";
+
+      // Validate the input to prevent empty queries, numbers, and special characters (except .)
+      if (!query || !isValidQuery(query)) {
+        resultDiv.innerHTML =
+          '<p class="no-results">Please enter a valid name.</p>';
+        return;
       }
 
-      function searchUser() {
-        let query = document
-          .getElementById("search")
-          .value.toLowerCase()
-          .trim();
-        let resultDiv = document.getElementById("result");
-        resultDiv.innerHTML = "";
+      // Split the query into parts to match names with spaces
+      const queryParts = query.split(" ").filter((part) => part);
 
-        // Validate the input to prevent empty queries, numbers, and special characters (except .)
-        if (!query || !isValidQuery(query)) {
-          resultDiv.innerHTML =
-            '<p class="no-results">Please enter a valid name.</p>';
-          return;
-        }
+      const results = rawData.filter((entry) => {
+        return queryParts.every((part) => entry.NAME.includes(part));
+      });
 
-        console.log("Searching for:", query);
-        let matches = rawData.filter((entry) => entry.NAME.includes(query));
-
-        if (matches.length > 0) {
-          matches.forEach((entry) => {
-            let info = `<div class='result-item'>
-                            <p><strong>${entry.NAME.toUpperCase()}</strong></p>
-                            <p>KTU No: ${entry.KTU_REGISTER_NO}</p>
-                            <p>Department: ${entry.DEPARTMENT}</p>
-                            <p>Year: ${entry.YEAR_OF_STUDY}</p>
-                            <p>Events: ${entry.PARTICIPATING_ITEMS}</p>
-                        </div>`;
-            resultDiv.innerHTML += info;
-          });
-        } else {
-          resultDiv.innerHTML =
-            '<p class="no-results">No matching records found.</p>';
-        }
+      if (results.length > 0) {
+        results.forEach((entry) => {
+          const resultItem = document.createElement("div");
+          resultItem.classList.add("result-item");
+          resultItem.innerHTML = `<h2 style='margin-bottom: 10px;'>${entry.NAME.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}</h2><p>KTU No: ${entry.KTU_REGISTER_NO}</p><p>Department: ${entry.DEPARTMENT}</p><p>Year: ${entry.YEAR_OF_STUDY}</p><p>Events: ${entry.PARTICIPATING_ITEMS}</p>`;
+          resultDiv.appendChild(resultItem);
+        });
+        resultDiv.style.marginBottom = '20px';
+      } else {
+        resultDiv.innerHTML =
+          '<p class="no-results">No matching records found.</p>';
       }
-    </script>
-  </body>
+    }
+  </script>
+</body>
+
 </html>
